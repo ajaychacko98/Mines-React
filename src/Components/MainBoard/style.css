@@ -1,0 +1,28 @@
+div.MainBoard-Background {
+  z-index: 3;
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: cadetblue;
+}
+
+div.Dark-Blue-Background {
+  z-index: 0;
+  position: fixed;
+  top: 0%;
+  bottom: 0%;
+  /* height: 100%; */
+  width: 100%;
+
+  background-color: rgba(59, 39, 187, 0.87);
+}
+div.Menu-Tab {
+  position: fixed;
+  background-color: rebeccapurple;
+  width: 100px;
+  margin-left: -8px;
+  height: 100%;
+}
