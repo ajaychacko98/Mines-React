@@ -7,8 +7,34 @@ class GridMain extends Component {
     super(props);
     this.state = {
       gridData: this.props.data,
+      noOfMines: this.props.minesCount,
+      totalCount: this.props.data.length * this.props.data.length,
+      notMines: 0,
     };
   }
+
+  mineReaction() {
+    setTimeout(function () {
+      alert("Lose you clikced a mine");
+    }, 5);
+    window.location.reload();
+  }
+  notAMineReaction = (x, y) => {
+    this.setState({ notMines: ++this.state.notMines });
+    // Make Reveal Function
+
+    if (this.state.notMines + this.state.noOfMines === this.state.totalCount) {
+      this.props.winGame();
+    }
+  };
+
+  revealNear = (x, y) => {
+    return;
+  };
+
+  revealSquare = (x, y) => {
+    return;
+  };
 
   renderingRow(arr, i) {
     return (
@@ -21,8 +47,8 @@ class GridMain extends Component {
                 Key={String(i + "," + j)}
                 minesNear={this.noOfMines(i, j)}
                 len={arr.length}
-                // ClickedBomb={}
-                // ClickedNotBomb={}
+                ClickedBomb={this.mineReaction}
+                ClickedNotBomb={this.notAMineReaction}
               />
             </td>
           );

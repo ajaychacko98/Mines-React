@@ -13,27 +13,39 @@ class Square extends Component {
       minesNear: this.props.minesNear,
       Symbol: ".",
       totalLen: this.props.len,
+      color: "azure",
     };
   }
 
   clicked = (x) => {
     // console.log("Clciked at Pos " + this.state.posx + " " + this.state.posy);
-    this.setState({ isClickedOnce: true });
-    if (this.state.isBomb === true) {
-      console.log("Exploded!!!!!!!!!!");
-      this.clickedBomb();
-    } else {
-      // console.log("show number");
-      this.clickedNotBomb();
-    }
+    if (!this.state.isClickedOnce)
+      if (this.state.isBomb) {
+        this.setState({ isClickedOnce: true });
+        this.clickedBomb();
+      } else {
+        this.setState({ isClickedOnce: true });
+        this.clickedNotBomb();
+      }
   };
 
   clickedNotBomb() {
-    this.state.Symbol = this.state.minesNear;
+    this.setState({ Symbol: this.state.minesNear });
+    this.setState({ color: "gray" });
+    this.props.ClickedNotBomb(this.state.posx, this.state.posy);
   }
 
   clickedBomb() {
-    this.state.Symbol = "#";
+    this.setState({ Symbol: "#" });
+    this.setState({ color: "crimson" });
+    this.props.ClickedBomb();
+  }
+
+  changeVisible() {
+    if (!this.state.isBomb) {
+      this.setState({ Symbol: this.state.minesNear });
+      this.setState({ color: "gray" });
+    }
   }
 
   render() {
@@ -41,7 +53,12 @@ class Square extends Component {
     return (
       <div>
         <button
-          style={{ width: wid, height: wid, fontSize: "200%" }}
+          style={{
+            width: wid,
+            height: wid,
+            backgroundColor: this.state.color,
+            fontSize: "200%",
+          }}
           onClick={this.clicked}
         >
           {this.state.Symbol}
