@@ -28,28 +28,6 @@ class Square extends Component {
     }
   };
 
-  noOfMines(x, y) {
-    let mines = 0;
-    if (this.state.gridData[x][y]) return -1;
-    if (
-      (x > 0) &
-      (y > 0) &
-      (x <= this.state.gridData[0].length - 2) &
-      (y <= this.state.gridData[0].length - 2)
-    ) {
-      if (this.state.gridData[x - 1][y - 1]) mines++;
-      if (this.state.gridData[x - 1][y]) mines++;
-      if (this.state.gridData[x - 1][y + 1]) mines++;
-      if (this.state.gridData[x][y - 1]) mines++;
-      if (this.state.gridData[x][y + 1]) mines++;
-      if (this.state.gridData[x + 1][y - 1]) mines++;
-      if (this.state.gridData[x + 1][y]) mines++;
-      if (this.state.gridData[x + 1][y + 1]) mines++;
-    } else {
-      return 0;
-    }
-    return mines;
-  }
   clickedNotBomb() {
     this.state.Symbol = this.state.minesNear;
   }
