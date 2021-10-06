@@ -1,53 +1,18 @@
 import React, { Component } from "react";
 import GridMain from "../Grid/GridMain";
-import Square from "../Mine-Square/Square";
 import "./style.css";
 
 class MainBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bombArray: [
-        [true, false, false, false],
-        [false, true, false, false],
-        [false, true, false, false],
-        [false, true, false, true],
-      ],
+      noOfMines: 6,
+      bombArray: this.mineGenerator(6, 6),
       score: this.getTemp(),
-      noOfMines: 5,
     };
   }
 
-  getTemp = () => {
-    return 0 | Number(localStorage.getItem("score"));
-  };
-
-  setTemp = (key) => {
-    localStorage.setItem("score", key);
-  };
-
-  renderSquareArray() {
-    var tempArray = this.state.bombArray;
-    var returnComponent = new Array(tempArray.length);
-    for (let i = 0; i < tempArray.length; i++) {
-      returnComponent[i] = new Array(tempArray.length);
-    }
-    for (let i = 0; i < tempArray.length; i++) {
-      for (let j = 0; j < tempArray.length; j++) {
-        returnComponent[i][j] = this.renderSquare(tempArray[i][j], i, j);
-      }
-    }
-    return returnComponent;
-  }
-
-  renderSquare(bomb, keyi, keyj) {
-    return <Square isBomb={bomb} key={keyi + "," + keyj} />;
-  }
-
-  clickCalled(x) {
-    console.log(x + "clicked");
-  }
-
+  //#region  Score , Game Management
   won = () => {
     let s = this.state.score + 1;
     this.setState({ score: s });
@@ -57,8 +22,36 @@ class MainBoard extends Component {
     }, 5);
     window.location.reload();
   };
+  resetScore = () => {
+    this.setTemp(0);
+    this.setState({ score: 0 });
+    window.location.reload();
+  };
+  //#endregion
+
+  mineGenerator = (n, size) => {
+    let i = 0;
+    var returnComponent = new Array(size);
+    for (let i = 0; i < size; i++) {
+      returnComponent[i] = new Array(size).fill(false);
+    }
+    while (i < n) {
+      let x = this.randomNumber(size);
+      let y = this.randomNumber(size);
+      if (!returnComponent[x][y]) {
+        i++;
+        returnComponent[x][y] = true;
+      }
+    }
+    return returnComponent;
+  };
+
+  randomNumber(n) {
+    return Math.floor(Math.random() * n);
+  }
 
   renderGrid() {
+    // this.mineGenerator(20, 10);
     return (
       <React.Fragment>
         <GridMain
@@ -70,11 +63,6 @@ class MainBoard extends Component {
       </React.Fragment>
     );
   }
-
-  resetScore = () => {
-    this.setTemp(0);
-    this.setState({ score: 0 });
-  };
 
   render() {
     return (
@@ -88,6 +76,15 @@ class MainBoard extends Component {
       </React.Fragment>
     );
   }
+  //#region  LocalStorage Methods
+  getTemp = () => {
+    return 0 | Number(localStorage.getItem("score"));
+  };
+
+  setTemp = (key) => {
+    localStorage.setItem("score", key);
+  };
+  //#endregion
 }
 
 export default MainBoard;

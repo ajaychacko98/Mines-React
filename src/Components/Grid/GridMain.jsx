@@ -9,7 +9,8 @@ class GridMain extends Component {
       gridData: this.props.data,
       noOfMines: this.props.minesCount,
       totalCount: this.props.data.length * this.props.data.length,
-      notMines: 0,
+      noOfLands: 0,
+      SquareArray: {},
     };
   }
 
@@ -19,21 +20,119 @@ class GridMain extends Component {
     }, 5);
     window.location.reload();
   }
-  notAMineReaction = (x, y) => {
-    this.setState({ notMines: ++this.state.notMines });
-    // Make Reveal Function
 
-    if (this.state.notMines + this.state.noOfMines === this.state.totalCount) {
+  LandsDug = () => {
+    let c = 0;
+    for (const [value] of Object.entries(this.state.SquareArray)) {
+      if (value.state.revealed) {
+        c++;
+      }
+    }
+    this.setState({ noOfLands: c });
+  };
+
+  notAMineReaction = (x, y, times) => {
+    this.newLand();
+    let reveals = this.revealNear(x, y);
+    // let allCords = reveals;
+    // let remains = [];
+    for (let i = 0; i < reveals.length; i++) {
+      let obj = this.state.SquareArray[reveals[i]];
+      if (!obj.state.revealed) {
+        if (obj.state.minesNear === 0) {
+          // remains.push(obj);
+        }
+        obj.revealLand();
+      }
+    }
+    // console.log("Accual All cords " + allCords);
+    // if (remains.length > 0) {
+    //   console.log("did it and remains " + remains.length);
+    //   remains.forEach((p) => {
+    //     let rest = this.revealNear(p.state.posx, p.state.posy);
+    //     console.log("Rest was " + rest.length);
+    //     for (let i = 0; i < rest.length; i++) {
+    //       if (!allCords.includes(rest[i]) && rest[i] != x + "," + y) {
+    //         console.log("Rest of all :" + rest[i]);
+    //         let obj = this.state.SquareArray[rest[i]];
+    //         if (!obj.state.revealed) {
+    //           obj.revealLand();
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
+
+    console.log(this.state.noOfLands);
+    if (this.state.noOfLands + this.state.noOfMines === this.state.totalCount) {
       this.props.winGame();
     }
   };
 
   revealNear = (x, y) => {
-    return;
+    let l = this.props.data.length;
+    let t = this.state.gridData;
+    let arr = [];
+    if ((x > 0) & (y > 0)) {
+      if ((x <= l - 2) & (y <= l - 2)) {
+        // console.log("case 1");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+      } else if (!(x <= l - 2) & (y <= l - 2)) {
+        // console.log("case 2");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+      } else if ((x <= l - 2) & !(y <= l - 2)) {
+        // console.log("case 3");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+      } else if (!(x <= l - 2) & !(y <= l - 2)) {
+        // console.log("case 9");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+      }
+    } else if ((x === 0) & (y > 0)) {
+      if (y <= l - 2) {
+        // console.log("case 4");
+        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+      } else {
+        // console.log("case 5");
+        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
+      }
+    } else if ((x > 0) & (y === 0)) {
+      if (x <= l - 2) {
+        // console.log("case 6");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+      } else {
+        // console.log("case 7");
+        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
+        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+      }
+    } else if ((x === 0) & (y === 0)) {
+      // console.log("case 8");
+      if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
+      if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
+    }
+
+    return arr;
   };
 
-  revealSquare = (x, y) => {
-    return;
+  newLand = () => {
+    this.setState({ noOfLands: ++this.state.noOfLands });
+  };
+
+  addtoDictonary = (key, ref) => {
+    let t = this.state.SquareArray;
+    t[key] = ref;
   };
 
   renderingRow(arr, i) {
@@ -49,6 +148,9 @@ class GridMain extends Component {
                 len={arr.length}
                 ClickedBomb={this.mineReaction}
                 ClickedNotBomb={this.notAMineReaction}
+                onNewLand={this.newLand}
+                Revealed={false}
+                Pointer={this.addtoDictonary}
               />
             </td>
           );
@@ -84,6 +186,10 @@ class GridMain extends Component {
         if (temp[x][y - 1]) mines++;
         if (temp[x + 1][y - 1]) mines++;
         if (temp[x + 1][y]) mines++;
+      } else if (!(x <= l - 2) & !(y <= l - 2)) {
+        if (temp[x - 1][y - 1]) mines++;
+        if (temp[x - 1][y]) mines++;
+        if (temp[x][y - 1]) mines++;
       }
     } else if ((x === 0) & (y > 0)) {
       if (y <= l - 2) {
