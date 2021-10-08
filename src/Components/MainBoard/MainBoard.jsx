@@ -5,29 +5,36 @@ import "./style.css";
 class MainBoard extends Component {
   constructor(props) {
     super(props);
+    var noOfFlag = this.setNoOfFlags(5);
     this.state = {
-      noOfMines: 6,
-      bombArray: this.mineGenerator(6, 6),
+      noOfMines: noOfFlag,
+      flags: noOfFlag,
+      bombArray: this.mineGenerator(noOfFlag, 5),
       score: this.getTemp(),
     };
   }
 
   //#region  Score , Game Management
   won = () => {
-    let s = this.state.score + 1;
-    this.setState({ score: s });
-    this.setTemp(s);
+    this.setState({ score: ++this.state.score });
+    this.setTemp(this.state.score);
+    console.log("You have won...");
     setTimeout(function () {
       alert("You Won the Game");
-    }, 5);
+    }, 10);
     window.location.reload();
   };
+
   resetScore = () => {
     this.setTemp(0);
     this.setState({ score: 0 });
     window.location.reload();
   };
   //#endregion
+
+  setNoOfFlags = (x) => {
+    return Number(x);
+  };
 
   mineGenerator = (n, size) => {
     let i = 0;
@@ -50,6 +57,14 @@ class MainBoard extends Component {
     return Math.floor(Math.random() * n);
   }
 
+  flagsRemaining = (x) => {
+    if (x) {
+      this.setState({ noOfFlag: ++this.state.flags });
+    } else {
+      this.setState({ noOfFlag: --this.state.flags });
+    }
+  };
+
   renderGrid() {
     // this.mineGenerator(20, 10);
     return (
@@ -59,6 +74,7 @@ class MainBoard extends Component {
           clicked={this.clickCalled}
           winGame={this.won}
           minesCount={this.state.noOfMines}
+          flagsRemain={this.flagsRemaining}
         />
       </React.Fragment>
     );
@@ -68,8 +84,15 @@ class MainBoard extends Component {
     return (
       <React.Fragment>
         <div className="Dark-Blue-Background">
-          <h2> Score : {this.state.score}</h2>
-          <button onClick={this.resetScore}> Clear Score</button>
+          <div style={{ textAlign: "center" }}>
+            {" "}
+            <h2> Score : {this.state.score}</h2>
+            <button onClick={this.resetScore}> Clear Score</button>
+            <br />
+            <span style={{ fontSize: "2em" }}>Flags: {this.state.flags} </span>
+            <br />
+          </div>
+
           <div className="Menu-Tab"> </div>
           <div className="MainBoard-Background">{this.renderGrid()}</div>
         </div>

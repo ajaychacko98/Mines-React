@@ -1,12 +1,12 @@
 div.MainBoard-Background {
   z-index: 3;
   position: fixed;
-  width: 600px;
-  height: 600px;
+  width: 611px;
+  height: 611px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: cadetblue;
+  background-color: rgb(189, 193, 197);
 }
 
 div.Dark-Blue-Background {

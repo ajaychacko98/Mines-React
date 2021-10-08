@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import "./style.css";
+import { ReactComponent as Flag } from "./Flag.svg";
 
 class Square extends Component {
   constructor(props) {
     super(props);
-    // this.myRef = React.;
-    // console.log(React.createRef());
     var keyCode = this.props.Key.split(",");
     this.props.Pointer(this.props.Key, this);
     this.state = {
@@ -14,10 +13,11 @@ class Square extends Component {
       posx: Number(keyCode[0]),
       posy: Number(keyCode[1]),
       minesNear: this.props.minesNear,
-      Symbol: ".",
+      Symbol: this.props.minesNear,
       totalLen: this.props.len,
       color: "azure",
       revealed: false,
+      notFlaged: true,
       key: keyCode,
     };
   }
@@ -26,14 +26,17 @@ class Square extends Component {
     if (!this.state.isClickedOnce && !this.state.revealed) {
       this.setState({ revealed: true });
       this.setState({ isClickedOnce: true });
-      this.props.onNewLand();
+      // this.props.onNewLand();
     }
-    this.setState({ Symbol: this.state.minesNear });
+    if (!this.state.minesNear === 0) {
+      this.setState({ Symbol: this.state.minesNear });
+    }
     this.setState({ color: "gray" });
   };
 
-  clicked = (x) => {
+  clicked = () => {
     if (!this.state.isClickedOnce && !this.state.revealed) {
+      // this.props.onNewLand();
       this.setState({ revealed: true });
       this.setState({ isClickedOnce: true });
       if (this.state.isBomb) {
@@ -45,10 +48,33 @@ class Square extends Component {
   };
 
   clickedNotBomb() {
-    this.setState({ Symbol: this.state.minesNear });
+    if (this.state.minesNear === 0) {
+      this.props.ClickedNotBomb(this.state.posx, this.state.posy, 0);
+    } else {
+      this.setState({ Symbol: this.state.minesNear });
+      this.props.ClickedNotBomb(this.state.posx, this.state.posy, 1);
+    }
     this.setState({ color: "gray" });
-    this.props.ClickedNotBomb(this.state.posx, this.state.posy, 0);
   }
+
+  clickedRightMouse = (x) => {
+    x.preventDefault();
+    if (this.state.notFlaged) {
+      // this.setState({ revealed: true });
+      // this.setState({ isClickedOnce: true });
+      this.setState({ color: "green" });
+      this.setState({ notFlaged: false });
+      this.setState({ Symbol: "" });
+      this.props.flaged(false);
+    } else if (!this.state.notFlaged) {
+      // this.setState({ revealed: false });
+      // this.setState({ isClickedOnce: false });
+      this.setState({ Symbol: this.state.minesNear });
+      this.setState({ notFlaged: true });
+      this.setState({ color: "azure" });
+      this.props.flaged(true);
+    }
+  };
 
   clickedBomb() {
     this.setState({ Symbol: "#" });
@@ -57,10 +83,11 @@ class Square extends Component {
   }
 
   render() {
-    let wid = 600 / this.state.totalLen;
+    let wid = Math.floor(600 / this.state.totalLen);
     return (
       <div>
-        <button
+        <div
+          className="Grid-Element"
           style={{
             width: wid,
             height: wid,
@@ -68,9 +95,11 @@ class Square extends Component {
             fontSize: "200%",
           }}
           onClick={this.clicked}
+          onContextMenu={this.clickedRightMouse}
         >
+          <Flag hidden={this.state.notFlaged} />
           {this.state.Symbol}
-        </button>
+        </div>
       </div>
     );
   }

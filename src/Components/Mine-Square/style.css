@@ -1,5 +1,8 @@
-button.Grid-Element {
-  width: 150px;
+div.Grid-Element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: 150px;
   height: 150px;
-  font-size: 200%;
+  font-size: 200%; */
 }
