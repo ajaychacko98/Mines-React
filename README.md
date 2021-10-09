@@ -1,9 +1,12 @@
-For Debugging on Chrome you will need this config file
+## For Debugging on Chrome you will need this config file
+Save it in /.vscode as launch.json 
+* Try Debug (Ctrl+Shift+D) and use option to create a config file, copy the below code and save it.
+* To start with debugging, make sure you are running  the server (npm start) and then press F5.
+* Refresh the page that load, Now you are ready to do Debugging in VS Code.
 
+
+```json
 {
-// Use IntelliSense to learn about possible attributes.
-// Hover to view descriptions of existing attributes.
-// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 "version": "0.2.0",
 "configurations": [
 {
@@ -15,6 +18,7 @@ For Debugging on Chrome you will need this config file
 }
 ]
 }
+```
 
 In the project directory, you can run:
 
