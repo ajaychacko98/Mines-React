@@ -34,104 +34,129 @@ class GridMain extends Component {
             obj.state.minesNear === 0 &&
             i + "," + j !== x + "," + y
           ) {
-            obj.revealLand();
-            this.setReveal(i, j, true);
-            this.revealForEmpty(i, j);
+            if (!obj.state.notFlaged) {
+              console.log("yes.. flaged");
+            } else {
+              obj.revealLand();
+              this.setReveal(i, j, true);
+              this.revealForEmpty(i, j);
+            }
           } else {
-            this.setReveal(i, j, true);
-            obj.revealLand();
+            if (!obj.state.notFlaged) {
+              console.log("yes.. flaged");
+            } else {
+              obj.revealLand();
+              this.setReveal(i, j, true);
+            }
           }
         }
       }
     }
+
+    this.gameWin();
   };
 
   notAMineReaction = (x, y, type) => {
     if (type === 0) {
       let obj = this.state.SquareArray[x + "," + y];
       if (!obj.state.revealed) {
-        obj.revealLand();
-        this.setReveal(x, y, true);
-        this.revealForEmpty(x, y);
+        if (!obj.state.notFlaged) {
+          console.log("yes.. flaged");
+        } else {
+          obj.revealLand();
+          this.setReveal(x, y, true);
+          this.revealForEmpty(x, y);
+        }
       }
     } else if (type === 1) {
       let obj = this.state.SquareArray[x + "," + y];
       if (!obj.state.revealed) {
-        obj.revealLand();
-        this.setReveal(x, y, true);
+        if (!obj.state.notFlaged) {
+          console.log("yes.. flaged");
+        } else {
+          obj.revealLand();
+          this.setReveal(x, y, true);
+        }
       }
     }
-    // console.log("Previous one " + this.state.noOfLands);
-    console.log("New one  " + this.noOfRevealed());
-    // this.setState({ noOfLands: this.noOfRevealed() });
+    this.gameWin();
+  };
+
+  gameWin = () => {
     if (this.noOfRevealed() + this.state.noOfMines === this.state.totalCount) {
       this.props.winGame();
     }
   };
 
-  revealNear = (x, y) => {
-    let l = this.props.data.length;
-    let t = this.state.gridData;
-    let arr = [];
-    if ((x > 0) & (y > 0)) {
-      if ((x <= l - 2) & (y <= l - 2)) {
-        // console.log("case 1");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-      } else if (!(x <= l - 2) & (y <= l - 2)) {
-        // console.log("case 2");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-      } else if ((x <= l - 2) & !(y <= l - 2)) {
-        // console.log("case 3");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-      } else if (!(x <= l - 2) & !(y <= l - 2)) {
-        // console.log("case 9");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-      }
-    } else if ((x === 0) & (y > 0)) {
-      if (y <= l - 2) {
-        // console.log("case 4");
-        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-      } else {
-        // console.log("case 5");
-        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-        if (!t[x][y - 1]) arr.push(x + "," + (y - 1));
-      }
-    } else if ((x > 0) & (y === 0)) {
-      if (x <= l - 2) {
-        // console.log("case 6");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-      } else {
-        // console.log("case 7");
-        if (!t[x - 1][y]) arr.push(x - 1 + "," + y);
-        if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-      }
-    } else if ((x === 0) & (y === 0)) {
-      // console.log("case 8");
-      if (!t[x + 1][y]) arr.push(x + 1 + "," + y);
-      if (!t[x][y + 1]) arr.push(x + "," + (y + 1));
-    }
+  gameLose = () => {
+    console.log(`Lost the game`);
 
-    return arr;
+    this.revealingAllMines();
+    this.mineReaction();
   };
 
-  // newLand = () => {
-  //   this.setState({ noOfLands: ++this.state.noOfLands });
-  //   // this.setState({ noOfLands: this.noOfRevealed() });
-  //   console.log(this.state.noOfLands);
-  //   console.log(this.noOfRevealed());
-  // };
+  revealingAllMines = () => {
+    let grid = this.props.data;
+    let l = grid.length;
+    for (let i = 0; i < l; i++) {
+      for (let j = 0; j < l; j++) {
+        let cell = this.state.SquareArray[i + "," + j];
+        if (cell.state.isBomb) {
+          console.log(`Bomb at ${i + "," + j} `);
+          cell.revealLand();
+        }
+      }
+    }
+  };
+
+  revealingWithFlag = (x, y) => {
+    let data = this.cellDetails(x, y);
+    let cell = this.state.SquareArray[x + "," + y];
+    let minesCount = cell.state.minesNear;
+    if (data.flag === minesCount && data.bomb === 0) {
+      console.log("Case 1: Yes Proceed Eeshi Poshii");
+      cell.revealLand();
+      this.setReveal(x, y, true);
+      this.revealForEmpty(x, y);
+    } else if (data.flag >= minesCount && data.bomb !== 0) {
+      // console.log(`Case 2: You Lose..`);
+      this.gameLose();
+      console.log(data);
+    } else if (data.flag < minesCount) {
+      console.log(`Case 3: some more flags needed`);
+      console.log(data);
+    }
+  };
+
+  cellDetails = (x, y) => {
+    let grid = this.props.data;
+    let l = grid.length;
+    let bomb = 0;
+    let flag = 0;
+    let land = 0;
+    let rland = 0;
+    for (var xoff = -1; xoff <= 1; xoff++) {
+      for (var yoff = -1; yoff <= 1; yoff++) {
+        var i = x + xoff;
+        var j = y + yoff;
+        if (i > -1 && i < l && j > -1 && j < l && i + "," + j !== x + "," + y) {
+          if (this.state.SquareArray[i + "," + j].state.isBomb) {
+            if (!this.state.SquareArray[i + "," + j].state.notFlaged) {
+              flag++;
+            } else {
+              bomb++;
+            }
+          } else if (this.state.SquareArray[i + "," + j].state.notFlaged) {
+            if (this.state.SquareArray[i + "," + j].state.revealed) rland++;
+            else land++;
+          } else flag++;
+        }
+      }
+    }
+
+    var temp = { bomb: bomb, flag: flag, rland: rland, land: land };
+    return temp;
+  };
 
   noOfRevealed = () => {
     let l = this.props.data.length;
@@ -190,10 +215,10 @@ class GridMain extends Component {
                 Pointer={this.addtoDictonary}
                 minesNear={this.countingMinesNear(i, j)}
                 revealingNear={this.revealForEmpty}
+                revealingWithFlag={this.revealingWithFlag}
                 len={arr.length}
-                ClickedBomb={this.mineReaction}
+                ClickedBomb={this.gameLose}
                 ClickedNotBomb={this.notAMineReaction}
-                // onNewLand={this.newLand}
                 flaged={this.flagging}
               />
             </td>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+width="80" height="80" viewBox="700 400 700 700">
+
+<!-- <svg xmlns="http://www.w3.org/2000/svg" 
+width="700" height="700" viewBox="700 400 700 700"> -->
+
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #4a4747;
+      }
+
+      .cls-2 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <circle id="bg" class="cls-1" cx="1072" cy="784" r="242"/>
+  <path id="Polygon_1" data-name="Polygon 1" class="cls-2" d="M1088.08,602.909l-68.73-47.1,23.55-79.926,83.3-2.3,27.92,78.507Z"/>
+  <path id="Polygon_1-2" data-name="Polygon 1" class="cls-2" d="M1070.15,960l68.84,46.983-23.59,79.74-83.43,2.29L1004,1010.69Z"/>
+  <path id="Polygon_1-3" data-name="Polygon 1" class="cls-2" d="M894,791.148L847.016,860,767.283,836.4l-2.29-83.428,78.317-27.968Z"/>
+  <path id="Polygon_1-4" data-name="Polygon 1" class="cls-2" d="M1243,793.852l46.98-68.847,79.74,23.594,2.29,83.428L1293.69,860Z"/>
+  <path id="Polygon_1-5" data-name="Polygon 1" class="cls-2" d="M946.41,655.017l-81.908,15.3-39.861-73.172,57.274-60.521,75.257,35.769Z"/>
+  <path id="Polygon_1-6" data-name="Polygon 1" class="cls-2" d="M1197.22,654.075l-4.53-83.2,77.73-30.013,52.57,64.652-45.25,69.971Z"/>
+  <path id="Polygon_1-7" data-name="Polygon 1" class="cls-2" d="M936.669,895.262l22.877,80.123L890.414,1021.9l-65.6-51.373L853.4,892.26Z"/>
+  <path id="Polygon_1-8" data-name="Polygon 1" class="cls-2" d="M1192.82,909.557l80.29-22.275,46,69.48-51.86,65.218L1189.2,992.8Z"/>
+</svg>

@@ -5,11 +5,11 @@ import "./style.css";
 class MainBoard extends Component {
   constructor(props) {
     super(props);
-    var noOfFlag = this.setNoOfFlags(5);
+    var noOfFlag = this.setNoOfFlags(80);
     this.state = {
       noOfMines: noOfFlag,
       flags: noOfFlag,
-      bombArray: this.mineGenerator(noOfFlag, 5),
+      bombArray: this.mineGenerator(noOfFlag, 20),
       score: this.getTemp(),
     };
   }
@@ -59,14 +59,13 @@ class MainBoard extends Component {
 
   flagsRemaining = (x) => {
     if (x) {
-      this.setState({ noOfFlag: ++this.state.flags });
+      this.setState({ flags: ++this.state.flags });
     } else {
-      this.setState({ noOfFlag: --this.state.flags });
+      this.setState({ flags: --this.state.flags });
     }
   };
 
   renderGrid() {
-    // this.mineGenerator(20, 10);
     return (
       <React.Fragment>
         <GridMain
